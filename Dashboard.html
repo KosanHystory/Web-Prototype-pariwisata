@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pariwisata Lampung</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background: #60a5fa;
+            border-radius: 10px;
+        }
+        body::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+        .details-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+        .details-section.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .header-bg-image {
+            background-image: url('lapung.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            animation: moveBackground 15s linear infinite alternate;
+        }
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                background-position-y: 0%;
+            }
+            100% {
+                background-position-y: 100%;
+            }
+        }
+
+        .card-emboss {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1),
+                        -2px -2px 6px rgba(255, 255, 255, 0.6);
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .card-emboss:hover {
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2),
+                        -4px -4px 10px rgba(255, 255, 255, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .nav-link-effect {
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            background-color: transparent;
+        }
+        .nav-link-effect:hover {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2),
+                        -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <header class="header-bg-image text-white p-4 shadow-lg">
+        <div class="header-overlay"></div>
+        <div class="container header-content">
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <h1 class="display-4 fw-bold">
+                        <span class="d-block text-white-75">Jelajahi Pesona</span>
+                        <span class="d-block text-info-25">Lampung</span>
+                    </h1>
+                </div>
+                <nav class="navbar navbar-expand-md navbar-dark">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav fs-5 fw-medium">
+                            <li class="nav-item"><a href="#" onclick="showPage('beranda')" class="nav-link rounded-lg text-white-75 hover-text-blue-800 nav-link-effect px-3 py-2">Beranda</a></li>
+                            <li class="nav-item"><a href="#" onclick="showPage('destinasi')" class="nav-link rounded-lg text-white-75 hover-text-blue-800 nav-link-effect px-3 py-2">Destinasi</a></li>
+                            <li class="nav-item"><a href="#" onclick="showPage('galeri')" class="nav-link rounded-lg text-white-75 hover-text-blue-800 nav-link-effect px-3 py-2">Galeri</a></li>
+                            <li class="nav-item"><a href="#" onclick="showPage('tentang')" class="nav-link rounded-lg text-white-75 hover-text-blue-800 nav-link-effect px-3 py-2">Tentang</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div id="page-container" class="flex-grow-1">
+        <section id="beranda-page" class="page-content container p-4">
+            <h2 class="display-5 fw-bold text-gray-800-75 mb-4 text-center">Selamat Datang di Pariwisata Lampung</h2>
+            <p class="text-gray-700-75 fs-5 text-center mx-auto" style="max-width: 48rem;">
+                Temukan keindahan alam dan budaya yang menakjubkan di Provinsi Lampung. Dari pantai yang eksotis hingga pegunungan yang hijau, Lampung menawarkan pengalaman tak terlupakan bagi setiap petualang. Jelajahi destinasi pilihan kami di bawah ini!
+            </p>
+            <div class="mt-4 d-flex justify-content-center">
+                <img src="nigga.jpeg" alt="Pemandangan Umum Lampung" class="rounded-3 shadow-lg img-fluid" style="max-width: 40rem;">
+            </div>
+        </section>
+
+        <section id="destinasi-page" class="page-content container p-4 d-none">
+            <h2 class="display-5 fw-bold text-gray-800-75 mb-4 text-center">Destinasi Populer di Lampung</h2>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 g-4">
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="puncak mas.jpg" alt="Gambar Puncak Mas" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Puncak Mas</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Puncak Mas menawarkan pemandangan kota Bandar Lampung yang spektakuler dari ketinggian. Nikmati udara segar, spot foto instagramable, dan suasana romantis, terutama saat matahari terbenam atau malam hari dengan kerlip lampu kota.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Pemandangan Kota 360 Derajat</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Spot Foto Unik (Rumah Pohon, Balon Udara Mini)</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Kafe dan Restoran dengan Pemandangan Indah</li>
+                            </ul>
+
+                            <div id="puncakMasDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Puncak Mas</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Puncak Mas adalah salah satu destinasi wisata keluarga yang populer di Bandar Lampung, menawarkan kombinasi keindahan alam dan fasilitas hiburan. Pengunjung dapat bersantai di gazebo, menikmati hidangan di kafe, atau berfoto di various spot menarik. Ada juga area bermain anak dan aktivitas outbound ringan. Tempat ini sangat ramai dikunjungi pada akhir pekan, jadi datanglah di hari biasa untuk pengalaman yang lebih tenang.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Sukadanaham, Tanjung Karang Barat, Bandar Lampung. <br>
+                                    <strong>Jam Buka:</strong> Biasanya siang hingga malam hari (disarankan cek jam operasional terbaru).<br>
+                                    <strong>Harga Tiket Masuk:</strong> Mulai dari Rp 20.000
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('puncakMasDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="way.jpeg" alt="Gambar Way Kambas National Park" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Taman Nasional Way Kambas</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Taman Nasional Way Kambas adalah rumah bagi konservasi gajah Sumatera yang terancam punah. Pengunjung dapat berinteraksi dengan gajah, belajar tentang konservasi, dan menjelajahi keindahan alam hutan tropis.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Pusat Latihan Gajah (PLG)</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Pengamatan Burung dan Flora</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Edukasi Konservasi Satwa</li>
+                            </ul>
+
+                            <div id="wayKambasDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Taman Nasional Way Kambas</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Taman Nasional Way Kambas (TNWK) bukan hanya destinasi wisata, tetapi juga pusat konservasi penting untuk gajah Sumatera. Pengunjung bisa menyaksikan atraksi gajah, memberi makan, atau bahkan mencoba menunggang gajah (tergantung ketersediaan dan kebijakan terbaru). Selain gajah, TNWK juga merupakan habitat bagi badak Sumatera, harimau Sumatera, dan berbagai jenis burung.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Kabupaten Lampung Timur (sekitar 2 jam dari Bandar Lampung). <br>
+                                    <strong>Aktivitas:</strong> Berinteraksi dengan gajah, wisata alam, fotografi.<br>
+                                    <strong>Harga Tiket Masuk:</strong> Mulai dari Rp 5.000 (belum termasuk aktivitas tambahan seperti menunggang gajah).
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('wayKambasDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="thay.jpg" alt="Gambar Thay Hin Bio Temple" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Kelenteng Thay Hin Bio</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Kelenteng Thay Hin Bio adalah salah satu kelenteng tertua dan paling bersejarah di Bandar Lampung. Arsitektur klasiknya yang megah dan ukiran naga yang indah menjadikan tempat ini daya tarik budaya dan spiritual.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Arsitektur Tiongkok Kuno</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Situs Bersejarah dan Keagamaan</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Spot Fotografi Bernuansa Budaya</li>
+                            </ul>
+
+                            <div id="thayHinBioDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Kelenteng Thay Hin Bio</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Kelenteng ini didirikan pada tahun 1850-an dan merupakan salah satu peninggalan sejarah yang penting bagi komunitas Tionghoa di Lampung. Selain berfungsi sebagai tempat ibadah, kelenteng ini juga sering dikunjungi wisatawan yang tertarik dengan arsitektur, sejarah, dan budaya Tionghoa. Suasana tenang dan ornamen-ornamen khas Tiongkok menjadi daya tarik tersendiri.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Jalan Ikan Kakap No. 19, Teluk Betung, Bandar Lampung. <br>
+                                    <strong>Jam Buka:</strong> Umumnya buka setiap hari (disarankan untuk menghormati aktivitas ibadah).<br>
+                                    <strong>Harga Tiket Masuk:</strong> Gratis (Donasi sukarela disarankan).
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('thayHinBioDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="mutun.jpg" alt="Gambar Pantai Mutun" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Pantai Mutun</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Pantai Mutun adalah salah satu pantai terdekat dari pusat kota Bandar Lampung, ideal untuk rekreasi keluarga. Dengan pasir putih dan air yang tenang, pantai ini menawarkan berbagai aktivitas air dan pemandangan yang indah.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Akses Mudah dari Kota</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Cocok untuk Berenang dan Bersantai</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Wahana Air (Banana Boat, Donat Boat)</li>
+                            </ul>
+
+                            <div id="mutunDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Pantai Mutun</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Pantai Mutun adalah pilihan populer bagi warga lokal untuk menghabiskan akhir pekan. Fasilitas di pantai ini cukup lengkap, termasuk warung makan, area parkir, dan penyewaan alat untuk aktivitas air. Dari Pantai Mutun, pengunjung juga bisa menyeberang ke Pulau Tangkil yang tak jauh dari sana untuk pengalaman pantai yang lebih sepi.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Teluk Betung Selatan, Pesawaran (dekat Bandar Lampung). <br>
+                                    <strong>Aktivitas:</strong> Berenang, berjemur, bermain pasir, naik wahana air.<br>
+                                    <strong>Harga Tiket Masuk:</strong> Mulai dari Rp 10.000.
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('mutunDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="tamankupukupu8.jpg" alt="Gambar Gita Persada Butterfly Park" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Taman Kupu-kupu Gita Persada</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Taman Kupu-kupu Gita Persada adalah surga bagi pecinta serangga dan alam. Dengan berbagai spesies kupu-kupu yang beterbangan bebas, tempat ini menawarkan pengalaman edukatif dan pemandangan yang menenangkan.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Observasi Kupu-kupu Beragam Spesies</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Pendidikan Lingkungan dan Konservasi</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Taman Asri dan Sejuk</li>
+                            </ul>
+
+                            <div id="gitaPersadaDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Taman Kupu-kupu Gita Persada</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Taman ini didirikan sebagai upaya konservasi kupu-kupu endemik Sumatera. Pengunjung dapat melihat siklus hidup kupu-kupu dari telur hingga dewasa, serta belajar tentang pentingnya menjaga ekosistem. Selain itu, ada juga area taman yang rimbun dan sejuk, cocok untuk bersantai sambil menikmati keindahan alam.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Sukarame, Teluk Betung Utara, Bandar Lampung. <br>
+                                    <strong>Jam Buka:</strong> Umumnya pagi hingga sore hari.<br>
+                                    <strong>Harga Tiket Masuk:</strong> Mulai dari Rp 15.000.
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('gitaPersadaDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="marina.png" alt="Gambar Pantai Marina" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Pantai Marina</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Pantai Marina adalah salah satu destinasi pantai yang indah di Lampung Selatan, terkenal dengan pemandangan laut yang jernih dan formasi batuan unik yang memukau. Cocok untuk bersantai dan menikmati matahari terbenam.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Pasir Putih dan Air Tenang</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Formasi Batu Karang Estetik</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Pemandangan Sunset yang Menawan</li>
+                            </ul>
+
+                            <div id="marinaDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Pantai Marina</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Terletak sekitar 70 km dari Bandar Lampung, Pantai Marina menawarkan keindahan alam yang masih asri. Selain pantai berpasir putih, pengunjung juga bisa menemukan gua-gua kecil dan spot menarik untuk berfoto. Aktivitas yang populer di sini meliputi berenang, bersantai di tepi pantai, atau menikmati keindahan sunset yang memukau. Fasilitas dasar seperti warung makan dan toilet juga tersedia.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Kecamatan Kalianda, Kabupaten Lampung Selatan. <br>
+                                    <strong>Jam Buka:</strong> Setiap hari, 24 jam (disarankan kunjungan siang hingga sore).<br>
+                                    <strong>Harga Tiket Masuk:</strong> Mulai dari Rp 15.000.
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('marinaDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="pulau pisang.png" alt="Gambar Pulau Pisang" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Pulau Pisang</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Terletak di lepas pantai Pesisir Barat Lampung, Pulau Pisang menawarkan keindahan alam bawah laut yang luar biasa, menjadikannya surga bagi para penyelam dan penggemar snorkeling. Pemandangan pantainya juga sangat menawan.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Spot Snorkeling dan Diving Terbaik</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Air Laut Jernih dan Terumbu Karang Indah</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Suasana Tenang dan Asri</li>
+                            </ul>
+
+                            <div id="pisangDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Pulau Pisang</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Pulau Pisang adalah pulau kecil yang belum banyak terjamah, menjadikannya destinasi ideal bagi mereka yang mencari ketenangan dan keindahan alam yang autentik. Kekayaan bawah lautnya dengan terumbu karang yang sehat dan beragam biota laut menarik banyak penyelam. Pengunjung dapat mencapai pulau ini dengan perahu dari Krui atau Kuala Stabas. Pulau ini juga merupakan habitat bagi beberapa jenis burung langka.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Kabupaten Pesisir Barat, Lampung. <br>
+                                    <strong>Aktivitas:</strong> Snorkeling, diving, bersantai, bird watching.<br>
+                                    <strong>Harga Tiket Masuk:</strong> Umumnya termasuk dalam paket tur perahu (harga perahu bervariasi).
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('pisangDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="Pahawang.png" alt="Gambar Pulau Pahawang" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Pulau Pahawang</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Pulau Pahawang, dengan keindahan bawah lautnya yang ikonik dan pantai berpasir putih, adalah magnet bagi wisatawan. Nikmati snorkeling, diving, atau sekadar bersantai di pantainya yang damai.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Coral Garden yang Terkenal</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Destinasi Snorkeling Populer</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Penginapan Terapung yang Unik</li>
+                            </ul>
+
+                            <div id="pahawangDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Pulau Pahawang</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Pulau Pahawang adalah salah satu permata tersembunyi di Lampung, terkenal dengan keindahan bawah lautnya yang menakjubkan, termasuk spot snorkeling "Taman Nemo" yang populer. Pulau ini juga dikelilingi oleh pulau-pulau kecil lain yang bisa dijelajahi. Banyak operator tur menawarkan paket perjalanan sehari atau menginap di penginapan terapung. Pastikan untuk membawa perlengkapan snorkeling Anda atau menyewanya di tempat.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Kecamatan Marga Punduh, Kabupaten Pesawaran, Lampung. <br>
+                                    <strong>Akses:</strong> Melalui Dermaga Ketapang, Pesawaran.<br>
+                                    <strong>Harga Tiket Masuk:</strong> Bervariasi, tergantung paket tur (biasanya Rp 100.000 - Rp 300.000 per orang untuk tur sehari).
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('pahawangDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 rounded-3 overflow-hidden card-emboss">
+                        <img src="Kerui.png" alt="Gambar Pantai Jukung" class="card-img-top" style="height: 16rem; object-fit: cover;">
+                        <div class="card-body p-4">
+                            <h3 class="card-title h4 fw-bold text-gray-900-75 mb-2">Pantai Jukung</h3>
+                            <p class="card-text text-gray-700-75 mb-3">
+                                Pantai Jukung menawarkan panorama pesisir yang tenang dengan deretan perahu nelayan tradisional. Destinasi yang sempurna untuk menikmati suasana lokal, memancing, atau sekadar menikmati keindahan alam.
+                            </p>
+                            <ul class="list-unstyled text-gray-600-75 mb-3">
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Suasana Pesisir yang Otentik</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Aktivitas Memancing dan Perahu Nelayan</li>
+                                <li><i class="bi bi-check-circle-fill me-2"></i>Tenang dan Jauh dari Keramaian</li>
+                            </ul>
+
+                            <div id="jukungDetails" class="details-section mt-3 pt-3 border-top border-gray-200">
+                                <h4 class="h5 fw-semibold text-gray-800-75 mb-2">Informasi Lengkap Pantai Jukung</h4>
+                                <p class="text-gray-600-75 mb-2">
+                                    Pantai Jukung adalah pantai yang lebih cocok untuk menikmati suasana lokal dan kehidupan nelayan. Berbeda dengan pantai-pantai lain yang fokus pada wisata bahari, Jukung menawarkan pemandangan deretan perahu jukung yang menjadi ciri khasnya. Pengunjung bisa bersantai, memancing, atau membeli ikan segar langsung dari nelayan. Pantai ini ideal untuk mereka yang mencari ketenangan dan pengalaman budaya lokal.
+                                </p>
+                                <p class="text-gray-600-75 small">
+                                    <strong>Lokasi:</strong> Dekat dengan pusat kota Krui, Pesisir Barat Lampung. <br>
+                                    <strong>Highlight:</strong> Kehidupan nelayan, pemandangan jukung, seafood segar.<br>
+                                    <strong>Harga Tiket Masuk:</strong> Gratis (parkir dan sewa perahu mungkin dikenakan biaya).
+                                </p>
+                            </div>
+                            <button onclick="toggleDetails('jukungDetails', this)" class="btn btn-primary mt-3 shadow-sm rounded-lg py-2 px-4 transition-all-300">
+                                Lihat Lebih Lanjut
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="galeri-page" class="page-content container p-4 d-none">
+            <h2 class="display-5 fw-bold text-gray-800-75 mb-4 text-center">Video Pariwisata Lampung</h2>
+            <p class="text-gray-700-75 fs-5 text-center mx-auto mb-4" style="max-width: 48rem;">
+                Saksikan keindahan Lampung melalui video di bawah ini untuk mendapatkan inspirasi perjalanan Anda!
+            </p>
+            <div class="mt-4 d-flex justify-content-center">
+                <div class="video-container" style="max-width: 48rem;">
+                    <iframe 
+                        src="https://www.youtube.com/embed/oCCOvvnw4cM" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        title="Video Pesona Lampung">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="tentang-page" class="page-content container p-4 d-none">
+            <h2 class="display-5 fw-bold text-gray-800-75 mb-4 text-center">Tentang Pariwisata Lampung</h2>
+            <p class="text-gray-700-75 fs-5 text-center mx-auto" style="max-width: 48rem;">
+                Situs ini didedikasikan untuk mempromosikan kekayaan pariwisata Provinsi Lampung. Kami berupaya memberikan informasi lengkap dan inspirasi bagi Anda yang ingin menjelajahi pesona Bumi Ruwa Jurai.
+            </p>
+            <div class="mt-4 d-flex justify-content-center">
+                <img src="https://placehold.co/800x450/FFA500/212121?text=Tentang+Kami" alt="Tentang Kami" class="rounded-3 shadow-lg img-fluid" style="max-width: 40rem;">
+            </div>
+        </section>
+    </div>
+
+    <footer class="bg-dark text-white-75 p-4 mt-auto">
+        <div class="container text-center text-gray-400-75">
+            &copy; 2025 Pariwisata Lampung. Semua Hak Cipta Dilindungi.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleDetails(id, button) {
+            const detailsSection = document.getElementById(id);
+            if (detailsSection.classList.contains('open')) {
+                detailsSection.classList.remove('open');
+                button.textContent = 'Lihat Lebih Lanjut';
+            } else {
+                detailsSection.classList.add('open');
+                button.textContent = 'Sembunyikan Detail';
+            }
+        }
+
+        function showPage(pageId) {
+            const allPages = document.querySelectorAll('.page-content');
+            allPages.forEach(page => {
+                page.classList.add('d-none');
+            });
+            document.getElementById(pageId + '-page').classList.remove('d-none');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('beranda'); 
+        });
+    </script>
+</body>
+</html>

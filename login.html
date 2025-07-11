@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Pariwisata Indah</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Mencegah scroll saat animasi latar belakang */
+        }
+        .background-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            /* Diubah: Transisi untuk fade in/out menjadi 3 detik (lebih halus) */
+            transition: opacity 3s ease-in-out; 
+            /* Diubah: Animasi panning menjadi 60 detik (1 menit) */
+            animation: panBackground 60s infinite alternate linear; 
+        }
+        .background-slider.active {
+            opacity: 1;
+        }
+        @keyframes panBackground {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Overlay untuk kontras teks */
+        .overlay {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Styling tambahan untuk form */
+        .form-container {
+            backdrop-filter: blur(8px); /* Efek blur pada latar belakang form */
+            background: rgba(255, 255, 255, 0.15); /* Latar belakang semi-transparan */
+            animation: fadeInScale 1s ease-out forwards; /* Animasi form saat muncul */
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        @keyframes fadeInScale {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Custom focus ring color */
+        .focus-ring-blue-500:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Blue-500 with 50% opacity */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen relative">
+
+    <!-- Background Slider Container -->
+    <div id="background-container" class="absolute inset-0">
+        <!-- Images will be injected here by JavaScript -->
+    </div>
+
+    <!-- Overlay for better text readability -->
+    <div class="overlay absolute inset-0 z-10"></div>
+
+    <!-- Login Form Container -->
+    <div class="form-container relative z-20 p-8 md:p-10 bg-white bg-opacity-10 rounded-2xl shadow-xl max-w-sm w-full mx-4 sm:mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">Selamat Datang</h2>
+        <form id="loginForm" action="#" method="POST" class="space-y-6">
+            <div>
+                <label for="username" class="block text-white text-lg font-medium mb-2">Nama Pengguna</label>
+                <input type="text" id="username" name="username" required
+                       class="w-full px-5 py-3 rounded-xl bg-gray-700 bg-opacity-50 text-white placeholder-gray-300 border-none focus-ring-blue-500 transition duration-300">
+            </div>
+            <div>
+                <label for="password" class="block text-white text-lg font-medium mb-2">Kata Sandi</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full px-5 py-3 rounded-xl bg-gray-700 bg-opacity-50 text-white placeholder-gray-300 border-none focus-ring-blue-500 transition duration-300">
+            </div>
+            <div class="flex items-center justify-between text-white text-sm">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 rounded-md focus:ring-blue-500 mr-2">
+                    Ingat Saya
+                </label>
+                <a href="#" class="text-blue-300 hover:text-blue-100 transition duration-300 font-semibold">Lupa Kata Sandi?</a>
+            </div>
+            <button type="submit"
+                    class="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-teal-400 text-white font-bold text-lg rounded-xl shadow-lg hover:from-blue-600 hover:to-teal-500 transition duration-300 transform hover:scale-105">
+                Masuk
+            </button>
+        </form>
+        <p class="text-center text-white text-sm mt-8">
+            Belum punya akun? <a href="#" class="text-blue-300 hover:text-blue-100 transition duration-300 font-semibold">Daftar Sekarang</a>
+        </p>
+    </div>
+
+    <script>
+        const images = [
+            'https://i.pinimg.com/736x/10/23/ef/1023efccad6d4fcd11de3b0c54895be4.jpg', // Contoh pantai
+            'https://i.pinimg.com/736x/c7/be/8d/c7be8d51bf35e8aecef518c992411549.jpg', // Contoh gunung
+            'https://sdmntprwestus.oaiusercontent.com/files/00000000-8a80-6230-9243-ea40e62ea4c6/raw?se=2025-06-23T19%3A34%3A00Z&sp=r&sv=2024-08-04&sr=b&scid=3a2172bd-56b5-58eb-9c76-65f889b9d744&skoid=a3412ad4-1a13-47ce-91a5-c07730964f35&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-23T14%3A27%3A36Z&ske=2025-06-24T14%3A27%3A36Z&sks=b&skv=2024-08-04&sig=jyPgWHOtvtDAocr5lH6o6hPGfEWSk6itGtfLz0cehhE%3D', // Contoh budaya
+            'https://placehold.co/1920x1080/FFA500/FFFFFF?text=Hutan+Tropis', // Contoh alam
+            'https://placehold.co/1920x1080/FF0000/FFFFFF?text=Kota+Kuno' // Contoh kota bersejarah
+        ];
+        let currentImageIndex = 0;
+        const backgroundContainer = document.getElementById('background-container');
+
+        function changeBackground() {
+            // Hapus kelas 'active' dari semua gambar yang ada
+            const existingImages = backgroundContainer.querySelectorAll('.background-slider');
+            existingImages.forEach(img => img.classList.remove('active'));
+
+            // Buat elemen div baru untuk gambar latar belakang
+            const newImageDiv = document.createElement('div');
+            newImageDiv.classList.add('background-slider');
+            newImageDiv.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+
+            // Tambahkan gambar baru ke container
+            backgroundContainer.appendChild(newImageDiv);
+
+            // Setelah elemen ditambahkan, tambahkan kelas 'active' setelah sedikit jeda
+            // Ini untuk memastikan transisi opacity berjalan dengan benar
+            setTimeout(() => {
+                newImageDiv.classList.add('active');
+            }, 10); // Jeda kecil
+
+            // Hapus gambar lama setelah transisi selesai
+            if (existingImages.length > 0) {
+                // Diubah: Durasi penghapusan gambar lama disesuaikan dengan transisi 3 detik
+                setTimeout(() => {
+                    existingImages.forEach(img => img.remove());
+                }, 3200); // Harus lebih lama dari transisi opacity (3s)
+            }
+            
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+
+        // Jalankan fungsi pertama kali
+        changeBackground();
+        // Diubah: Atur interval untuk mengubah latar belakang setiap 1 menit (60 detik)
+        setInterval(changeBackground, 60000); // Ganti gambar setiap 60 detik (1 menit)
+
+        // Handle form submission (contoh)
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman form
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Di sini Anda bisa menambahkan logika otentikasi
+            console.log('Nama Pengguna:', username);
+            console.log('Kata Sandi:', password);
+
+            // Contoh pesan (gunakan modal UI nyata, bukan alert)
+            displayMessage('Login berhasil! Selamat datang.');
+        });
+
+        // Fungsi untuk menampilkan pesan pengganti alert
+        function displayMessage(message, type = 'success') {
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add(
+                'fixed', 'bottom-8', 'left-1/2', '-translate-x-1/2', 'px-6', 'py-3',
+                'rounded-lg', 'shadow-lg', 'text-white', 'text-center', 'z-50',
+                'transition-opacity', 'duration-500', 'ease-out'
+            );
+            if (type === 'success') {
+                messageContainer.classList.add('bg-green-500');
+            } else if (type === 'error') {
+                messageContainer.classList.add('bg-red-500');
+            }
+            messageContainer.textContent = message;
+            document.body.appendChild(messageContainer);
+
+            // Animasi fade in
+            setTimeout(() => {
+                messageContainer.style.opacity = '1';
+            }, 10);
+
+            // Animasi fade out setelah beberapa detik
+            setTimeout(() => {
+                messageContainer.style.opacity = '0';
+                messageContainer.addEventListener('transitionend', () => messageContainer.remove());
+            }, 3000); // Pesan akan hilang setelah 3 detik
+        }
+    </script>
+</body>
+</html>
